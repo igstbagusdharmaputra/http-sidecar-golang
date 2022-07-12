@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: http-golang
+spec:
+  selector:
+    matchLabels:
+      app: http-golang
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: http-golang
+    spec:
+      containers:
+      - name: http-golang
+        image: dharmatkj/http-golang:latest
+        ports:
+        - containerPort: 8000
+        env:
+        - name: PORT
+          value: "8000"
+      - name: http-golang-sidecar
+        image: dharmatkj/http-golang-sidecar:latest
+        ports:
+        - containerPort: 8080
+        env:
+        - name: BE_PORT
+          value: "8000"
+        - name: FE_PORT
+          value: "8080"
